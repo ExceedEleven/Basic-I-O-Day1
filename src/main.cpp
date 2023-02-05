@@ -11,7 +11,7 @@ void setup() {
   pinMode(GREEN,OUTPUT);
   pinMode(RED,OUTPUT);
   pinMode(YELLOW,OUTPUT);
-  
+
 }
 
 void binary_led1(int n,int r,int y, int g)
@@ -36,9 +36,5 @@ void binary_led1(int n,int r,int y, int g)
 
 void loop() {
   // put your main code here, to run repeatedly:
-  binary_led1(n,RED,YELLOW,GREEN);
-  n+=1;
-  delay(1000);
-
   
 }
