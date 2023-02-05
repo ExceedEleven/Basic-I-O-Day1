@@ -3,7 +3,6 @@
 #define BUTTON 27
 #define LDR 32
 Bounce debouncer = Bounce();
-int n=0;
 #define RED 26
 #define YELLOW 25
 #define GREEN 33
@@ -14,37 +13,42 @@ void setup() {
   Serial.println("BUTTON");
   debouncer.attach(BUTTON, INPUT_PULLUP);
   debouncer.interval(25);
-  pinMode(GREEN,OUTPUT);
-  pinMode(RED,OUTPUT);
-  pinMode(YELLOW,OUTPUT);
+  ledcSetup(0,5000,8);
+    ledcAttachPin(GREEN,0);
+    ledcSetup(1,5000,8);
+    ledcAttachPin(YELLOW,1);
+    ledcSetup(2,5000,8);
+    ledcAttachPin(RED,2);
 
 }
 
-void binary_led1(int n,int r,int y, int g)
+void binary_led1(int n,int i,int r,int y, int g)
 {
     n = n%8;
     if (n % 2 ==0) 
-        digitalWrite(g, LOW);
+        ledcWrite(0,0);
     else 
-        digitalWrite(g, HIGH);
+        ledcWrite(0,i);
     
     if ((n ==2 || n==3) || (n ==6) || n ==7)
-        digitalWrite(y,HIGH);
+        ledcWrite(1,i);
     else 
-        digitalWrite(y,LOW);
+        ledcWrite(1,0);
 
     if (n==4 || n ==5 || n ==6 || n==7)
-        digitalWrite(r,HIGH);
+        ledcWrite(2,i);
     else
-        digitalWrite(r,LOW);
+        ledcWrite(2,0);
     
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  int ldr_analog = map(analogRead(LDR),2000,4095,0,255);
   debouncer.update();
   if(debouncer.fell()){
     n++;
-    Serial.println(n);
   }
+  binary_led1(n,ldr_analog,RED,YELLOW,GREEN);
+   Serial.println(n);
 }
